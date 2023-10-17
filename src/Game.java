@@ -1,27 +1,57 @@
 import processing.core.PApplet;
 
+import java.util.ArrayList;
+
 public class Game extends PApplet {
-    // TODO: declare game variables
+    ArrayList<Brick> brickList = new ArrayList<>();
+    Ball b;
+    Paddle p;
+    Brick br;
 
     public void settings() {
-        size(800, 800);   // set the window size
+        size(800, 800);
 
     }
 
     public void setup() {
-        // TODO: initialize game variables
+        b = new Ball(400, 400, 4, 2, color(255, 0, 0));
+        p = new Paddle(400, 600, 15, 2, color(0, 255, 0));
+
+        for (int i = 0; i < 800; i+=100) {
+            for (int j = 0; j < 200; j+=20) {
+                int red = (int)(Math.random()*255);
+                int green = (int)(Math.random()*255);
+                int blue = (int)(Math.random()*255);
+                br = new Brick(i, j, color(red, green, blue));
+                brickList.add(br);
+            }
+        }
     }
 
-    /***
-     * Draws each frame to the screen.  Runs automatically in a loop at frameRate frames a second.
-     * tick each object (have it update itself), and draw each object
-     */
     public void draw() {
-        background(255);    // paint screen white
-        fill(0,255,0);          // load green paint color
-        ellipse(mouseX, mouseY, 60, 60);  // draw circle at mouse loc
-        ellipse(mouseX - 80, mouseY, 60, 60);  // draw circle at mouse loc
-        ellipse(mouseX + 80, mouseY, 60, 60);  // draw circle at mouse loc
+        background(204);
+        b.draw(this);
+        b.bounceOffPaddle(p);
+        p.draw(this);
+
+        for (int i = 0; i < 80; i++) {
+            brickList.get(i).draw(this);
+        }
+        for (Brick br3 : brickList) {
+            if(b.bounceOffBrick(br)) {
+                brickList.remove(br3);
+            }
+        }
+    }
+
+    @Override
+    public void keyPressed() {
+        if(key == 'a'){
+            p.updateLeftX();
+        }
+        if(key == 'd') {
+            p.updateRightX();
+        }
     }
 
     public static void main(String[] args) {
