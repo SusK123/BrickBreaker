@@ -21,4 +21,6 @@ public class Brick {
         game.fill(color);
         game.rect(x, y, 100, 20);
     }
+
+
 }
