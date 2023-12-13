@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 public class Ball {
     private int x, y, xSpeed, ySpeed, color;
+    private int score = 0;
+    private int size = 10;
+    private int gameMode = 0;
 
     public Ball(int x, int y, int xs, int ys, int color) {
         this.x = x;
@@ -19,13 +22,14 @@ public class Ball {
     }
 
     public void bounceOffWall() {
-        if(y+10 > 800) {
+        if(y+size > 800) {
             ySpeed = -ySpeed;
-        } else if(y-10 < 0) {
+            gameMode = 1;
+        } else if(y-size < 0) {
             ySpeed = -ySpeed;
-        } else if(x+10 > 800) {
+        } else if(x+size > 800) {
             xSpeed = -xSpeed;
-        } else if(x-10 < 0) {
+        } else if(x-size < 0) {
             xSpeed = -xSpeed;
         }
     }
@@ -42,6 +46,7 @@ public class Ball {
         if (x+10 >= br.getX() && x-10 <= br.getX()+100) {
             if (y+10 == br.getY() || y-10 == br.getY()+20) {
                 ySpeed = -ySpeed;
+                score++;
                 return true;
             }
         }
@@ -50,10 +55,17 @@ public class Ball {
     }
 
     public void draw(PApplet game) {
-        game.fill(0, 0, 255);
-        game.ellipse(x, y, 20, 20);
-        update();
-        bounceOffWall();
-
+        if(gameMode == 0) {
+            game.fill(0, 0, 255);
+            game.ellipse(x, y, 20, 20);
+            game.text("Score: " + score, 10, 500);
+            update();
+            bounceOffWall();
+        } else if(gameMode == 1) {
+            game.background(0);
+            game.fill(255, 0, 0);
+            game.textSize(100);
+            game.text("You lose!", 215, 400);
+        }
     }
 }
