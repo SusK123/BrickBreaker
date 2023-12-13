@@ -14,7 +14,7 @@ public class Game extends PApplet {
     }
 
     public void setup() {
-        b = new Ball(400, 400, 4, 2, color(255, 0, 0));
+        b = new Ball(400, 400, -4, -2, color(255, 0, 0));
         p = new Paddle(400, 600, 15, 2, color(0, 255, 0));
 
         for (int i = 0; i < 800; i+=100) {
@@ -30,17 +30,27 @@ public class Game extends PApplet {
 
     public void draw() {
         background(204);
-        b.draw(this);
+        fill(255, 0, 0);
+        rect(0, 790, 800, 10);
         b.bounceOffPaddle(p);
         p.draw(this);
 
-        for (int i = 0; i < 80; i++) {
+        for (int i = 0; i < brickList.size(); i++) {
             brickList.get(i).draw(this);
         }
-        for (Brick br3 : brickList) {
-            if(b.bounceOffBrick(br)) {
-                brickList.remove(br3);
+        for (int i = 0; i < brickList.size(); i++) {
+            if(b.bounceOffBrick(brickList.get(i))) {
+                brickList.remove(i);
             }
+        }
+
+        b.draw(this);
+
+        if(brickList.isEmpty()) {
+            background(0);
+            fill(255, 0, 0);
+            textSize(100);
+            text("You win!", 215, 400);
         }
     }
 
